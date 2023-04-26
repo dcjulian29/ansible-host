@@ -1,0 +1,99 @@
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+archives:
+  - files:
+      - LICENSE
+    builds_info:
+      group: root
+      owner: root
+      mode: 0755
+    name_template: "dcjulian29.apps.ansible-host_{{ .Version }}_{{ .Os }}"
+    format_overrides:
+      - format: zip
+        goos: windows
+nfpms:
+  - package_name: dcjulian29.apps.ansible-host
+    file_name_template: "{{ .PackageName }}_{{ .Version }}"
+    homepage: https://github.com/dcjulian29/ansible-host/
+    maintainer: Julian Easterling <julian@julianscorner.com>
+    license: Apache 2.0
+    dependencies:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    description: |-
+      ansible-host can be used for configuring and maintaining a computer system in a network environment.
+      Typically involved tasks are: installing updates, managing user accounts, configuring security
+      settings, and ensuring that the system is running smoothly. Depending on the type of host and the
+      specific requirements, managing a host can be a complex and time-consuming task. This tools aims to
+      simplify that.
+
+      Provisioning is a process of setting up and configuring computer systems or servers to meet
+      specific requirements. This typically involves installing and configuring software packages,
+      setting up user accounts and permissions, and configuring security settings. Provisioning allows
+      organizations to quickly and easily deploy new servers and services on-demand, speeding up the
+      process of application development and deployment. It also ensures that systems are configured
+      consistently and according to best practices, reducing the risk of errors and vulnerabilities.
+
+      Runbooks are a set of detailed and repeatable procedures tasks to standardize and automate common
+      tasks and processes. These procedures may include steps for infrastructure and hardware validation,
+      troubleshooting issues, and more. By using runbooks, one can ensure that tasks are completed
+      consistently and efficiently, reducing the risk of errors and downtime.
+    formats:
+      - apk
+      - deb
+      - rpm
+    bindir: /usr/local/bin
+    overrides:
+      apk:
+        dependencies:
+          - docker
+chocolateys:
+  - name: dcjulian29.apps.ansible-host
+    authors: Julian Easterling <julian@julianscorner.com>
+    project_url: https://github.com/dcjulian29/docker-ansible/
+    copyright: 2023 Julian Easterling julian@julianscorner.com
+    license_url: https://github.com/dcjulian29/docker-ansible/blob/main/LICENSE
+    require_license_acceptance: false
+    bug_tracker_url: https://github.com/dcjulian29/docker-ansible/issues
+    description: |
+      ansible-host can be used for configuring and maintaining a computer system in a network environment.
+      Typically involved tasks are: installing updates, managing user accounts, configuring security
+      settings, and ensuring that the system is running smoothly. Depending on the type of host and the
+      specific requirements, managing a host can be a complex and time-consuming task. This tools aims to
+      simplify that.
+
+      Provisioning is a process of setting up and configuring computer systems or servers to meet
+      specific requirements. This typically involves installing and configuring software packages,
+      setting up user accounts and permissions, and configuring security settings. Provisioning allows
+      organizations to quickly and easily deploy new servers and services on-demand, speeding up the
+      process of application development and deployment. It also ensures that systems are configured
+      consistently and according to best practices, reducing the risk of errors and vulnerabilities.
+
+      Runbooks are a set of detailed and repeatable procedures tasks to standardize and automate common
+      tasks and processes. These procedures may include steps for infrastructure and hardware validation,
+      troubleshooting issues, and more. By using runbooks, one can ensure that tasks are completed
+      consistently and efficiently, reducing the risk of errors and downtime.
+    dependencies:
+      - id: docker-desktop
+    skip_publish: false
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
