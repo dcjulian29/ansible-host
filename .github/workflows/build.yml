@@ -17,7 +17,7 @@ on:
 
 jobs:
   build:
-    if: startsWith(github.reftype, 'branch')
+    if: startsWith(github.ref, 'ref/tags') == false
     runs-on: windows-2022
 
     steps:
