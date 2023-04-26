@@ -61,11 +61,11 @@ nfpms:
 chocolateys:
   - name: dcjulian29.apps.ansible-host
     authors: Julian Easterling <julian@julianscorner.com>
-    project_url: https://github.com/dcjulian29/docker-ansible/
+    project_url: https://github.com/dcjulian29/ansible-host/
     copyright: 2023 Julian Easterling julian@julianscorner.com
-    license_url: https://github.com/dcjulian29/docker-ansible/blob/main/LICENSE
+    license_url: https://github.com/dcjulian29/ansible-host/blob/main/LICENSE
     require_license_acceptance: false
-    bug_tracker_url: https://github.com/dcjulian29/docker-ansible/issues
+    bug_tracker_url: https://github.com/dcjulian29/ansible-host/issues
     description: |
       ansible-host can be used for configuring and maintaining a computer system in a network environment.
       Typically involved tasks are: installing updates, managing user accounts, configuring security
