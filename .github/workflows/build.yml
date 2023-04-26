@@ -4,20 +4,20 @@ on:
   push:
     paths:
       - '**.go'
-    tags-ignore:
-      - "[0-9].[0-9].[0-9]"
+      - 'go.mod'
+      - 'go.sum'
 
   pull_request:
     paths:
       - '**.go'
-    tags-ignore:
-      - "[0-9].[0-9].[0-9]"
+      - 'go.mod'
+      - 'go.sum'
 
   workflow_dispatch:
 
 jobs:
   build:
-    if: startsWith(github.ref, 'refs/heads/main')
+    if: startsWith(github.reftype, 'branch')
     runs-on: windows-2022
 
     steps:
