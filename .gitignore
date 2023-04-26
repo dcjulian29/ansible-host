@@ -1,0 +1,16 @@
+.ansible-host.yml
+ansible-host.exe
+ansible-host
+
+dist/
+
+collections/
+roles/
+playbooks/
+ansible.cfg
+.ansible-lint
+hosts.ini
+Vagrantfile
+
+requirements.yml
+ansible.log
