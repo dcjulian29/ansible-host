@@ -28,3 +28,4 @@ jobs:
           args: release
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          CHOCO_API_KEY: ${{ secrets.CHOCO_API_KEY }}
