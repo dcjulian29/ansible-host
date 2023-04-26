@@ -86,6 +86,8 @@ chocolateys:
       consistently and efficiently, reducing the risk of errors and downtime.
     dependencies:
       - id: docker-desktop
+    api_key: "{{ .Env.CHOCO_API_KEY}}"
+    source_repo: "https://www.myget.org/F/dcjulian29-chocolatey/"
     skip_publish: false
 checksum:
   name_template: 'checksums.txt'
