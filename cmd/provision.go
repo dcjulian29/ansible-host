@@ -25,14 +25,14 @@ import (
 )
 
 var provisionCmd = &cobra.Command{
-	Use:   "provision [hostname]",
-	Short: "Provision host via Ansible in the target environment",
-	Long:  "Provision host via Ansible in the target environment",
+	Use:   "provision [playbook]",
+	Short: "Provision host(s) via Ansible in the target environment",
+	Long:  "Provision host(s) via Ansible in the target environment",
 	Run: func(cmd *cobra.Command, args []string) {
 		playbook := fmt.Sprintf("playbooks/%s.yml", args[0])
 
 		if len(args) == 0 {
-			cobra.CheckErr(errors.New("hostname to deploy to was not provided"))
+			cobra.CheckErr(errors.New("playbook to deploy to was not provided"))
 		}
 
 		inventory, _ := cmd.Flags().GetString("inventory")
