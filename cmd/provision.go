@@ -67,7 +67,6 @@ var provisionCmd = &cobra.Command{
 			env = []string{
 				"ANSIBLE_DISPLAY_OK_HOSTS=false",
 				"ANSIBLE_DISPLAY_SKIPPED_HOSTS=false",
-				"ANSIBLE_VERBOSITY=0",
 			}
 		}
 
@@ -92,12 +91,11 @@ func init() {
 	rootCmd.AddCommand(provisionCmd)
 
 	provisionCmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
-	provisionCmd.Flags().StringSliceP("tags", "t", []string{}, "only plays and task tagged with these values")
 	provisionCmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit execution to specified subset")
-	provisionCmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
+
 	provisionCmd.Flags().Bool("ask-vault-password", true, "ask for vault password")
 	provisionCmd.Flags().Bool("ask-become-password", false, "ask for privilege escalation password")
 	provisionCmd.Flags().Bool("flush-cache", false, "clear the fact cache for every host in inventory")
-	provisionCmd.Flags().Bool("step", false, "one-step-at-a-time: confirm each task before running")
+	provisionCmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
 	provisionCmd.Flags().Bool("check", false, "perform a dry run and report back any differences")
 }

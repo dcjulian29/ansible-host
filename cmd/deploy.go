@@ -73,6 +73,7 @@ func init() {
 
 	deployCmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
 	deployCmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit execution to specified subset")
-	deployCmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
+
 	deployCmd.Flags().Bool("ask-vault-password", true, "ask for vault password")
+	deployCmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
 }
