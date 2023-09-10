@@ -1,6 +1,6 @@
 module github.com/dcjulian29/ansible-host
 
-go 1.20
+go 1.21
 
 require go.szostok.io/version v1.1.0
 
