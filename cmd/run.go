@@ -38,8 +38,8 @@ var runCmd = &cobra.Command{
 		}
 
 		param := []string{
-			fmt.Sprintf("-i %s", inventory),
-			fmt.Sprintf("-l %s", strings.Join(limit, ",")),
+			"-i", inventory,
+			"-l", strings.Join(limit, ","),
 		}
 
 		if r, _ := cmd.Flags().GetBool("ask-become-password"); r {

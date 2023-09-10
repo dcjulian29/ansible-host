@@ -17,7 +17,6 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/spf13/cobra"
 )
@@ -34,8 +33,10 @@ var factCmd = &cobra.Command{
 		inventory, _ := cmd.Flags().GetString("inventory")
 
 		param := []string{
-			fmt.Sprintf("-i %s", inventory),
-			"-m ansible.builtin.setup",
+			"-i",
+			inventory,
+			"-m",
+			"ansible.builtin.setup",
 			args[0],
 		}
 

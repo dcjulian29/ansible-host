@@ -16,8 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +28,7 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			inventory, _ := cmd.Flags().GetString("inventory")
 
-			executeExternalProgram("ansible-inventory", fmt.Sprintf("-i %s", inventory), "--list", "--yaml")
+			executeExternalProgram("ansible-inventory", "-i", inventory, "--list", "--yaml")
 		},
 		PreRun: func(cmd *cobra.Command, args []string) {
 			ensureAnsibleDirectory()

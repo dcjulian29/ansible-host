@@ -36,19 +36,14 @@ var (
 		},
 		FParseErrWhitelist: cobra.FParseErrWhitelist{UnknownFlags: true},
 		Run: func(cmd *cobra.Command, args []string) {
-			if len(command) == 0 {
-				cmd.Help()
-				return
-			}
-
 			inventory, _ := cmd.Flags().GetString("inventory")
 			limit, _ := cmd.Flags().GetStringSlice("subset")
 
 			param := []string{
-				fmt.Sprintf("-i %s", inventory),
-				fmt.Sprintf("-l %s", strings.Join(limit, ",")),
-				"-m shell",
-				fmt.Sprintf("-a '%s'", command),
+				"-i", inventory,
+				"-l", strings.Join(limit, ","),
+				"-m", "shell",
+				"-a", fmt.Sprintf("'%s'", command),
 				"all",
 			}
 
@@ -59,6 +54,11 @@ var (
 			executeExternalProgram("ansible", param...)
 		},
 		PreRun: func(cmd *cobra.Command, args []string) {
+			if len(command) == 0 {
+				cmd.Help()
+				return
+			}
+
 			ensureAnsibleDirectory()
 			if len(command) > 0 {
 				inventory, _ := cmd.Flags().GetString("inventory")

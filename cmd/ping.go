@@ -16,7 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -31,9 +30,9 @@ var pingCmd = &cobra.Command{
 		limit, _ := cmd.Flags().GetStringSlice("subset")
 
 		param := []string{
-			fmt.Sprintf("-i %s", inventory),
-			fmt.Sprintf("-l %s", strings.Join(limit, ",")),
-			"-m ping",
+			"-i", inventory,
+			"-l", strings.Join(limit, ","),
+			"-m", "ping",
 			"all",
 		}
 

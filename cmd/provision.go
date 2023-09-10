@@ -30,19 +30,13 @@ var provisionCmd = &cobra.Command{
 	Long:  "Provision host(s) via Ansible in the target environment",
 	Run: func(cmd *cobra.Command, args []string) {
 		playbook := fmt.Sprintf("playbooks/%s.yml", args[0])
-
-		if len(args) == 0 {
-			cobra.CheckErr(errors.New("playbook to deploy to was not provided"))
-		}
-
 		inventory, _ := cmd.Flags().GetString("inventory")
 		limit, _ := cmd.Flags().GetStringSlice("subset")
-
 		env := []string{""}
 
 		param := []string{
-			fmt.Sprintf("-i %s", inventory),
-			fmt.Sprintf("-l %s", strings.Join(limit, ",")),
+			"-i", inventory,
+			"-l", strings.Join(limit, ","),
 		}
 
 		if r, _ := cmd.Flags().GetBool("ask-become-password"); r {
@@ -76,11 +70,17 @@ var provisionCmd = &cobra.Command{
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
 		ensureAnsibleDirectory()
-		if len(args) > 0 {
+		if len(args) == 0 {
+			cobra.CheckErr(errors.New("provision playbook was not provided"))
+		}
+
+		if len(args) == 1 {
 			playbook := filepath.Join("playbooks", fmt.Sprintf("%s.yml", args[0]))
 
 			ensurefileExists(playbook, "Ansible playbook file is not accessable!")
 		}
+
+		cmd.Help()
 	},
 	PostRun: func(cmd *cobra.Command, args []string) {
 		ensureWorkingDirectory()
