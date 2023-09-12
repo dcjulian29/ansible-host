@@ -57,9 +57,9 @@ var deployCmd = &cobra.Command{
 			playbook := filepath.Join("playbooks", fmt.Sprintf("%s.yml", args[0]))
 
 			ensurefileExists(playbook, "Ansible playbook file is not accessable!")
+		} else {
+			cmd.Help()
 		}
-
-		cmd.Help()
 	},
 	PostRun: func(cmd *cobra.Command, args []string) {
 		ensureWorkingDirectory()
