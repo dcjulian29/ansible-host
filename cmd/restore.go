@@ -24,12 +24,21 @@ var restoreCmd = &cobra.Command{
 	Short: "Restore Ansible collections and roles from files, URLs or Ansible Galaxy",
 	Long:  "Restore Ansible collections and roles from files, URLs or Ansible Galaxy",
 	Run: func(cmd *cobra.Command, args []string) {
-		verbose, _ := cmd.Flags().GetBool("verbose")
-		param := []string{"install", "-r", "requirements.yml"}
+		param := []string{"install"}
 
-		if verbose {
-			param = []string{"install", "-v", "-r", "requirements.yml"}
+		if r, _ := cmd.Flags().GetBool("ignore-certs"); r {
+			param = append(param, "--ignore-certs")
 		}
+
+		if r, _ := cmd.Flags().GetBool("force"); r {
+			param = append(param, "--force")
+		}
+
+		if r, _ := cmd.Flags().GetBool("verbose"); r {
+			param = append(param, "--verbose")
+		}
+
+		param = append(param, "-r", "requirements.yml")
 
 		executeExternalProgram("ansible-galaxy", param...)
 	},
@@ -45,5 +54,7 @@ var restoreCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(restoreCmd)
 
+	restoreCmd.Flags().BoolP("ignore-certs", "c", false, "ignore TLS/SSL certificate validation errors")
+	restoreCmd.Flags().BoolP("force", "f", false, "force overwriting an existing role or collection")
 	restoreCmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
 }
