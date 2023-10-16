@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/spf13/cobra"
 )
@@ -32,12 +33,18 @@ var factCmd = &cobra.Command{
 
 		inventory, _ := cmd.Flags().GetString("inventory")
 
+		filter, _ := cmd.Flags().GetString("filter")
+
 		param := []string{
 			"-i",
 			inventory,
 			"-m",
 			"ansible.builtin.setup",
 			args[0],
+		}
+
+		if len(filter) > 0 {
+			param = append(param, "-a", fmt.Sprintf("'filter=%s'", filter))
 		}
 
 		executeExternalProgram("ansible", param...)
@@ -54,4 +61,5 @@ func init() {
 	rootCmd.AddCommand(factCmd)
 
 	factCmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
+	factCmd.Flags().StringP("filter", "f", "", "only return facts that match the shell-style pattern")
 }
