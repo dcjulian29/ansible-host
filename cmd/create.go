@@ -23,10 +23,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var deployCmd = &cobra.Command{
-	Use:   "deploy [hostname]",
-	Short: "Deploy a host via an imperative-style Ansible playbook",
-	Long:  "Deploy a host via an imperative-style Ansible playbook",
+var createCmd = &cobra.Command{
+	Use:   "create [hostname]",
+	Short: "Create a host via an imperative-style Ansible playbook",
+	Long:  "Create a host via an imperative-style Ansible playbook",
 	Run: func(cmd *cobra.Command, args []string) {
 		playbook := fmt.Sprintf("playbooks/%s.yml", args[0])
 		inventory, _ := cmd.Flags().GetString("inventory")
@@ -50,7 +50,7 @@ var deployCmd = &cobra.Command{
 	PreRun: func(cmd *cobra.Command, args []string) {
 		ensureAnsibleDirectory()
 		if len(args) == 0 {
-			cobra.CheckErr(errors.New("hostname to deploy to was not provided"))
+			cobra.CheckErr(errors.New("hostname to create to was not provided"))
 		}
 
 		if len(args) == 1 {
@@ -67,9 +67,9 @@ var deployCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(deployCmd)
+	rootCmd.AddCommand(createCmd)
 
-	deployCmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
-	deployCmd.Flags().Bool("ask-vault-password", true, "ask for vault password")
-	deployCmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
+	createCmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
+	createCmd.Flags().Bool("ask-vault-password", true, "ask for vault password")
+	createCmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
 }
