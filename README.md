@@ -1,6 +1,6 @@
 # Ansible Host Tool (ansible-host)
 
-[![Build](https://github.com/dcjulian29/ansible-host/actions/workflows/build.yml/badge.svg)](https://github.com/dcjulian29/ansible-host/actions/workflows/build.yml) [![Release](https://github.com/dcjulian29/ansible-host/actions/workflows/release.yml/badge.svg)](https://github.com/dcjulian29/ansible-host/actions/workflows/release.yml) [![GitHub Release](https://img.shields.io/github/v/release/dcjulian29/ansible-host)](https://github.com/dcjulian29/ansible-host/releases) [![GitHub Issues](https://img.shields.io/github/issues-raw/dcjulian29/ansible-host.svg)](https://github.com/dcjulian29/ansible-host/issues)
+[![Build](https://github.com/dcjulian29/ansible-host/actions/workflows/build.yml/badge.svg)](https://github.com/dcjulian29/ansible-host/actions/workflows/build.yml) [![GitHub Release](https://img.shields.io/github/v/release/dcjulian29/ansible-host)](https://github.com/dcjulian29/ansible-host/releases) [![GitHub Issues](https://img.shields.io/github/issues-raw/dcjulian29/ansible-host.svg)](https://github.com/dcjulian29/ansible-host/issues)
 
 ansible-host can be used for configuring and maintaining a computer system in a network environment.
 Typically involved tasks are: installing updates, managing user accounts, configuring security

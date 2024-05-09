@@ -1,22 +1,13 @@
 ---
-name: Build
-on:
+name: Ansible Host Tool
+'on':
   push:
-    paths:
-      - '**.go'
-      - 'go.mod'
-      - 'go.sum'
 
   pull_request:
-    paths:
-      - '**.go'
-      - 'go.mod'
-      - 'go.sum'
-
-  workflow_dispatch:
 
 jobs:
   build:
+    name: Build Tool
     runs-on: windows-2022
 
     steps:
@@ -36,3 +27,30 @@ jobs:
       - uses: goreleaser/goreleaser-action@v4
         with:
           args: build --snapshot --clean
+
+  release:
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    name: Release Tool
+    needs: [build]
+    runs-on: windows-2022
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - run: git fetch --force --tags
+
+      - uses: actions/setup-go@v4
+        with:
+          cache-dependency-path: ${{ github.workspace }}/go.sum
+          go-version-file: ${{ github.workspace }}/go.mod
+
+      - run: go version
+
+      - uses: goreleaser/goreleaser-action@v4
+        with:
+          args: release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CHOCO_API_KEY: ${{ secrets.CHOCO_API_KEY }}
