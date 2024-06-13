@@ -12,3 +12,8 @@ updates:
     schedule:
       interval: "daily"
     rebase-strategy: "auto"
+
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "daily"
