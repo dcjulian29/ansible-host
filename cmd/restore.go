@@ -38,6 +38,10 @@ var restoreCmd = &cobra.Command{
 			param = append(param, "--verbose")
 		}
 
+		if r, _ := cmd.Flags().GetBool("upgrade"); r {
+			param = append(param, "--upgrade")
+		}
+
 		param = append(param, "-r", "requirements.yml")
 
 		executeExternalProgram("ansible-galaxy", param...)
@@ -57,4 +61,5 @@ func init() {
 	restoreCmd.Flags().BoolP("ignore-certs", "c", false, "ignore TLS/SSL certificate validation errors")
 	restoreCmd.Flags().BoolP("force", "f", false, "force overwriting an existing role or collection")
 	restoreCmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
+	restoreCmd.Flags().BoolP("upgrade", "u", false, "upgrade existing role or collection")
 }
