@@ -1,13 +1,14 @@
 module github.com/dcjulian29/ansible-host
 
-go 1.22.2
+go 1.23.0
+
 toolchain go1.24.1
 
 require go.szostok.io/version v1.2.0
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
-	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
+	github.com/go-viper/mapstructure/v2 v2.3.0 // indirect
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
