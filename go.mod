@@ -1,6 +1,6 @@
 module github.com/dcjulian29/ansible-host
 
-go 1.23.0
+go 1.24.0
 
 toolchain go1.24.1
 
@@ -45,9 +45,9 @@ require (
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/spf13/viper v1.21.0
 	github.com/subosito/gotenv v1.6.0 // indirect
-	golang.org/x/crypto v0.35.0 // indirect
-	golang.org/x/sys v0.30.0 // indirect
-	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
