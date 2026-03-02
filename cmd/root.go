@@ -25,6 +25,7 @@ import (
 	"github.com/dcjulian29/ansible-host/cmd/inventory"
 	"github.com/dcjulian29/ansible-host/cmd/ping"
 	"github.com/dcjulian29/ansible-host/cmd/provision"
+	"github.com/dcjulian29/ansible-host/cmd/restore"
 	"github.com/dcjulian29/go-toolbox/color"
 	"github.com/spf13/cobra"
 	"go.szostok.io/version/extension"
@@ -83,4 +84,5 @@ func init() {
 	rootCmd.AddCommand(inventory.NewCommand())
 	rootCmd.AddCommand(ping.NewCommand())
 	rootCmd.AddCommand(provision.NewCommand())
+	rootCmd.AddCommand(restore.NewCommand())
 }
