@@ -21,6 +21,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/dcjulian29/go-toolbox/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.szostok.io/version/extension"
@@ -64,6 +65,11 @@ func Execute() error {
 			extension.WithUpgradeNotice("dcjulian29", "ansible-host"),
 		),
 	)
+
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, "\n"+color.Fatal(err.Error()))
+		os.Exit(1)
+	}
 
 	return rootCmd.Execute()
 }
