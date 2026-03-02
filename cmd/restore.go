@@ -50,9 +50,6 @@ var restoreCmd = &cobra.Command{
 		ensureAnsibleDirectory()
 		ensurefileExists("requirements.yml", "Requirements file is not accessable!")
 	},
-	PostRun: func(cmd *cobra.Command, args []string) {
-		ensureWorkingDirectory()
-	},
 }
 
 func init() {

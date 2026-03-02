@@ -52,9 +52,6 @@ var factCmd = &cobra.Command{
 	PreRun: func(cmd *cobra.Command, args []string) {
 		ensureAnsibleDirectory()
 	},
-	PostRun: func(cmd *cobra.Command, args []string) {
-		ensureWorkingDirectory()
-	},
 }
 
 func init() {

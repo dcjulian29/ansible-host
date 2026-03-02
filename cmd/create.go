@@ -61,9 +61,6 @@ var createCmd = &cobra.Command{
 			cmd.Help()
 		}
 	},
-	PostRun: func(cmd *cobra.Command, args []string) {
-		ensureWorkingDirectory()
-	},
 }
 
 func init() {

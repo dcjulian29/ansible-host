@@ -66,9 +66,6 @@ var (
 				ensurefileExists(inventory, "Ansible inventory file is not accessable!")
 			}
 		},
-		PostRun: func(cmd *cobra.Command, args []string) {
-			ensureWorkingDirectory()
-		},
 	}
 )
 

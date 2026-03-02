@@ -67,9 +67,6 @@ var runCmd = &cobra.Command{
 			cobra.CheckErr(errors.New("runbook is not accessable"))
 		}
 	},
-	PostRun: func(cmd *cobra.Command, args []string) {
-		ensureWorkingDirectory()
-	},
 }
 
 func init() {
