@@ -54,6 +54,15 @@ Runbooks are a set of detailed and repeatable procedures tasks to standardize an
 tasks and processes. These procedures may include steps for infrastructure and hardware validation,
 troubleshooting issues, and more. By using runbooks, one can ensure that tasks are completed
 consistently and efficiently, reducing the risk of errors and downtime.`,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) == 0 {
+				return cmd.Help()
+			}
+
+			return nil
+		},
 	}
 )
 
