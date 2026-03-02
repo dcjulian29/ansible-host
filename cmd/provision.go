@@ -30,7 +30,7 @@ var provisionCmd = &cobra.Command{
 	Use:   "provision [playbook]",
 	Short: "Provision host(s) via Ansible in the target environment",
 	Long:  "Provision host(s) via Ansible in the target environment",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		playbook := fmt.Sprintf("playbooks/%s.yml", args[0])
 		inventory, _ := cmd.Flags().GetString("inventory")
 		limit, _ := cmd.Flags().GetStringSlice("subset")
@@ -69,6 +69,8 @@ var provisionCmd = &cobra.Command{
 		param = append(param, playbook)
 
 		executeExternalProgramEnv("ansible-playbook", env, param...)
+
+		return nil
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := ansible.EnsureAnsibleDirectory(); err != nil {

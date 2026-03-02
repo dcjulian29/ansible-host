@@ -29,7 +29,7 @@ var createCmd = &cobra.Command{
 	Use:   "create [hostname]",
 	Short: "Create a host via an imperative-style Ansible playbook",
 	Long:  "Create a host via an imperative-style Ansible playbook",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		playbook := fmt.Sprintf("playbooks/%s.yml", args[0])
 		inventory, _ := cmd.Flags().GetString("inventory")
 
@@ -48,6 +48,8 @@ var createCmd = &cobra.Command{
 		param = append(param, playbook)
 
 		executeExternalProgram("ansible-playbook", param...)
+
+		return nil
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := ansible.EnsureAnsibleDirectory(); err != nil {

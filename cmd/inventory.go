@@ -30,7 +30,7 @@ var (
 		Aliases: []string{"inv"},
 		Short:   "Show inventory information for the Ansible environment",
 		Long:    "Show inventory information for the Ansible environment",
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			inventory, _ := cmd.Flags().GetString("inventory")
 			limit, _ := cmd.Flags().GetStringSlice("subset")
 
@@ -54,6 +54,8 @@ var (
 			}
 
 			executeExternalProgram("ansible-inventory", param...)
+
+			return nil
 		},
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			if err := ansible.EnsureAnsibleDirectory(); err != nil {

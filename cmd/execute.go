@@ -37,7 +37,7 @@ var (
 			return nil
 		},
 		FParseErrWhitelist: cobra.FParseErrWhitelist{UnknownFlags: true},
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			inventory, _ := cmd.Flags().GetString("inventory")
 			limit, _ := cmd.Flags().GetStringSlice("subset")
 
@@ -54,6 +54,8 @@ var (
 			}
 
 			executeExternalProgram("ansible", param...)
+
+			return nil
 		},
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			if err := ansible.EnsureAnsibleDirectory(); err != nil {

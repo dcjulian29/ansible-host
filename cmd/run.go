@@ -28,7 +28,7 @@ var runCmd = &cobra.Command{
 	Use:   "run [runbook]",
 	Short: "Run a runbook (aka. playbook) via Ansible in the target environment",
 	Long:  "Run a runbook (aka. playbook) via Ansible in the target environment",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		runbook := fmt.Sprintf("%s.runbook.yml", args[0])
 		inventory, _ := cmd.Flags().GetString("inventory")
 		limit, _ := cmd.Flags().GetStringSlice("subset")
@@ -54,6 +54,8 @@ var runCmd = &cobra.Command{
 		param = append(param, runbook)
 
 		executeExternalProgramEnv("ansible-playbook", env, param...)
+
+		return nil
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := ansible.EnsureAnsibleDirectory(); err != nil {

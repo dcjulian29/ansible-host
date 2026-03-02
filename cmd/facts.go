@@ -27,7 +27,7 @@ var factCmd = &cobra.Command{
 	Use:   "facts [hostname]",
 	Short: "Show Ansible facts from the target environment",
 	Long:  "Show Ansible facts from the target environment",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			cobra.CheckErr(errors.New("hostname to gather facts was not provided"))
 		}
@@ -49,6 +49,8 @@ var factCmd = &cobra.Command{
 		}
 
 		executeExternalProgram("ansible", param...)
+
+		return nil
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := ansible.EnsureAnsibleDirectory(); err != nil {

@@ -28,7 +28,7 @@ var pingCmd = &cobra.Command{
 	Use:   "ping",
 	Short: "Ping the Ansible environment",
 	Long:  "Ping the Ansible environment",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		inventory, _ := cmd.Flags().GetString("inventory")
 		limit, _ := cmd.Flags().GetStringSlice("subset")
 
@@ -40,6 +40,8 @@ var pingCmd = &cobra.Command{
 		}
 
 		executeExternalProgram("ansible", param...)
+
+		return nil
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := ansible.EnsureAnsibleDirectory(); err != nil {

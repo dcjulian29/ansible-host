@@ -27,7 +27,7 @@ var restoreCmd = &cobra.Command{
 	Use:   "restore",
 	Short: "Restore Ansible collections and roles from files, URLs or Ansible Galaxy",
 	Long:  "Restore Ansible collections and roles from files, URLs or Ansible Galaxy",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		param := []string{"install"}
 
 		if r, _ := cmd.Flags().GetBool("ignore-certs"); r {
@@ -49,6 +49,8 @@ var restoreCmd = &cobra.Command{
 		param = append(param, "-r", "requirements.yml")
 
 		executeExternalProgram("ansible-galaxy", param...)
+
+		return nil
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := ansible.EnsureAnsibleDirectory(); err != nil {
