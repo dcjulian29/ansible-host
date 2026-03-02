@@ -21,18 +21,13 @@ import (
 
 	"github.com/dcjulian29/go-toolbox/color"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"go.szostok.io/version/extension"
 )
 
-var (
-	cfgFile    string
-	folderPath string
-
-	rootCmd = &cobra.Command{
-		Use:   "ansible-host",
-		Short: "Provision, ping, play runbooks, and execute command utilizing Ansible",
-		Long: `Provision, ping, play runbooks, and execute command utilizing Ansible:
+var rootCmd = &cobra.Command{
+	Use:   "ansible-host",
+	Short: "Provision, ping, play runbooks, and execute command utilizing Ansible",
+	Long: `Provision, ping, play runbooks, and execute command utilizing Ansible:
 
 This tool can be used for configuring and maintaining a computer system in a network environment.
 Typically involved tasks are: installing updates, managing user accounts, configuring security
@@ -51,17 +46,16 @@ Runbooks are a set of detailed and repeatable procedures tasks to standardize an
 tasks and processes. These procedures may include steps for infrastructure and hardware validation,
 troubleshooting issues, and more. By using runbooks, one can ensure that tasks are completed
 consistently and efficiently, reducing the risk of errors and downtime.`,
-		SilenceErrors: true,
-		SilenceUsage:  true,
-		PreRunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) == 0 {
-				return cmd.Help()
-			}
+	SilenceErrors: true,
+	SilenceUsage:  true,
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) == 0 {
+			return cmd.Help()
+		}
 
-			return nil
-		},
-	}
-)
+		return nil
+	},
+}
 
 func Execute() {
 	rootCmd.AddCommand(
@@ -73,32 +67,5 @@ func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, "\n"+color.Fatal(err.Error()))
 		os.Exit(1)
-	}
-}
-
-func init() {
-	pwd, _ := os.Getwd()
-
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is ~/.ansible-host.yaml)")
-	rootCmd.PersistentFlags().StringVar(&folderPath, "path", pwd, "path to Ansible folder")
-	cobra.OnInitialize(initConfig)
-}
-
-func initConfig() {
-	if cfgFile != "" {
-		viper.SetConfigFile(cfgFile)
-	} else {
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
-		viper.AddConfigPath(home)
-		viper.SetConfigType("yaml")
-		viper.SetConfigName(".ansible-host")
-	}
-
-	viper.AutomaticEnv()
-
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
 }
