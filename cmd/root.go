@@ -107,14 +107,6 @@ func initConfig() {
 	}
 }
 
-func ensureWorkingDirectory() {
-	if workingDirectory != folderPath {
-		if err := os.Chdir(workingDirectory); err != nil {
-			cobra.CheckErr(err)
-		}
-	}
-}
-
 func executeExternalProgram(program string, params ...string) {
 	executeExternalProgramEnv(program, []string{""}, params...)
 }
@@ -127,7 +119,6 @@ func executeExternalProgramEnv(program string, env []string, params ...string) {
 	cmd.Env = append(os.Environ(), env...)
 
 	if err := cmd.Run(); err != nil {
-		ensureWorkingDirectory()
 		cobra.CheckErr(err)
 	}
 }
@@ -140,7 +131,6 @@ func executeCommand(program string, env []string, params ...string) string {
 	output, err := cmd.CombinedOutput()
 
 	if err != nil {
-		ensureWorkingDirectory()
 		cobra.CheckErr(string(output[:]))
 	}
 
