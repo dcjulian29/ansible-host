@@ -73,7 +73,7 @@ func NewCommand() *cobra.Command {
 	cmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
 	cmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit to specified subset")
 	cmd.Flags().Bool("toml", false, "Use TOML format instead of default JSON")
-	cmd.Flags().BoolP("yaml", "y", false, "Use TOML format instead of default JSON")
+	cmd.Flags().BoolP("yaml", "y", false, "Use YAML format instead of default JSON")
 
 	cmd.MarkFlagsMutuallyExclusive("toml", "yaml")
 
