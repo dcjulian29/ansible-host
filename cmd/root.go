@@ -18,7 +18,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"os/exec"
 
 	"github.com/dcjulian29/go-toolbox/color"
 	"github.com/spf13/cobra"
@@ -27,9 +26,8 @@ import (
 )
 
 var (
-	cfgFile          string
-	folderPath       string
-	workingDirectory string
+	cfgFile    string
+	folderPath string
 
 	rootCmd = &cobra.Command{
 		Use:   "ansible-host",
@@ -66,8 +64,6 @@ consistently and efficiently, reducing the risk of errors and downtime.`,
 )
 
 func Execute() {
-	workingDirectory, _ = os.Getwd()
-
 	rootCmd.AddCommand(
 		extension.NewVersionCobraCmd(
 			extension.WithUpgradeNotice("dcjulian29", "ansible-host"),
@@ -105,30 +101,4 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
-}
-
-func executeExternalProgramEnv(program string, env []string, params ...string) {
-	cmd := exec.Command(program, params...)
-	cmd.Stderr = os.Stderr
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Env = append(os.Environ(), env...)
-
-	if err := cmd.Run(); err != nil {
-		cobra.CheckErr(err)
-	}
-}
-
-func executeCommand(program string, env []string, params ...string) string {
-	cmd := exec.Command(program, params...)
-	cmd.Stdin = os.Stdin
-	cmd.Env = append(os.Environ(), env...)
-
-	output, err := cmd.CombinedOutput()
-
-	if err != nil {
-		cobra.CheckErr(string(output[:]))
-	}
-
-	return string(output[:])
 }

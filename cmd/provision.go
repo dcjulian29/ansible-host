@@ -22,6 +22,7 @@ import (
 	"strings"
 
 	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/go-toolbox/execute"
 	"github.com/dcjulian29/go-toolbox/filesystem"
 	"github.com/spf13/cobra"
 )
@@ -67,9 +68,7 @@ var provisionCmd = &cobra.Command{
 
 		param = append(param, playbook)
 
-		executeExternalProgramEnv("ansible-playbook", env, param...)
-
-		return nil
+		return execute.ExternalProgramEnv("ansible-playbook", env, param...)
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := ansible.EnsureAnsibleDirectory(); err != nil {
@@ -87,7 +86,7 @@ var provisionCmd = &cobra.Command{
 				return fmt.Errorf("playbook file for '%s' does not exist", args[0])
 			}
 		} else {
-			cmd.Help()
+			return cmd.Help()
 		}
 
 		return nil

@@ -21,6 +21,7 @@ import (
 	"strings"
 
 	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/go-toolbox/execute"
 	"github.com/spf13/cobra"
 )
 
@@ -52,7 +53,10 @@ var runCmd = &cobra.Command{
 
 		param = append(param, runbook)
 
-		executeExternalProgramEnv("ansible-playbook", env, param...)
+		err := execute.ExternalProgramEnv("ansible-playbook", env, param...)
+		if err != nil {
+			return err
+		}
 
 		return nil
 	},
@@ -65,10 +69,13 @@ var runCmd = &cobra.Command{
 			return errors.New("runbook name was not provided")
 		}
 
-		collections := executeCommand("ansible-galaxy", []string{""}, "collection", "list")
+		collections, err := execute.ExternalProgramCapture("ansible-galaxy", "collection", "list")
+		if err != nil {
+			return err
+		}
 
 		if !strings.Contains(collections, args[0]) {
-			return errors.New("runbook is not accessable")
+			return errors.New("runbook is not installed")
 		}
 
 		return nil
