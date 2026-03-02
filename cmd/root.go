@@ -66,7 +66,7 @@ consistently and efficiently, reducing the risk of errors and downtime.`,
 	}
 )
 
-func Execute() error {
+func Execute() {
 	workingDirectory, _ = os.Getwd()
 
 	rootCmd.AddCommand(
@@ -79,8 +79,6 @@ func Execute() error {
 		fmt.Fprintln(os.Stderr, "\n"+color.Fatal(err.Error()))
 		os.Exit(1)
 	}
-
-	return rootCmd.Execute()
 }
 
 func init() {
