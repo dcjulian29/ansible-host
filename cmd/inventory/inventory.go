@@ -39,14 +39,18 @@ func NewCommand() *cobra.Command {
 				"-l", strings.Join(limit, ","),
 			}
 
-			if r, _ := cmd.Flags().GetBool("toml"); r {
-				param = append(param, "--toml")
-			}
+			if variables {
+				if r, _ := cmd.Flags().GetBool("toml"); r {
+					param = append(param, "--toml")
+				}
 
-			if r, _ := cmd.Flags().GetBool("yaml"); r {
-				param = append(param, "--yaml")
+				if r, _ := cmd.Flags().GetBool("yaml"); r {
+					param = append(param, "--yaml")
+				}
+			} else {
+				param = append(param, "--graph")
 			}
-
+    
 			if len(args) > 0 {
 				param = append(param, "--host", args[0])
 			} else {
@@ -72,6 +76,7 @@ func NewCommand() *cobra.Command {
 
 	cmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
 	cmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit to specified subset")
+	cmd.Flags().Bool("variables", false, "include host variables")
 	cmd.Flags().Bool("toml", false, "Use TOML format instead of default JSON")
 	cmd.Flags().BoolP("yaml", "y", false, "Use YAML format instead of default JSON")
 
