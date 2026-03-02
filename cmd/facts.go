@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/go-toolbox/execute"
 	"github.com/spf13/cobra"
 )
 
@@ -47,9 +48,7 @@ var factCmd = &cobra.Command{
 			param = append(param, "-a", fmt.Sprintf("'filter=%s'", filter))
 		}
 
-		executeExternalProgram("ansible", param...)
-
-		return nil
+		return execute.ExternalProgram("ansible", param...)
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := ansible.EnsureAnsibleDirectory(); err != nil {

@@ -19,6 +19,7 @@ import (
 	"errors"
 
 	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/go-toolbox/execute"
 	"github.com/dcjulian29/go-toolbox/filesystem"
 	"github.com/spf13/cobra"
 )
@@ -47,9 +48,7 @@ var restoreCmd = &cobra.Command{
 
 		param = append(param, "-r", "requirements.yml")
 
-		executeExternalProgram("ansible-galaxy", param...)
-
-		return nil
+		return execute.ExternalProgram("ansible-galaxy", param...)
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := ansible.EnsureAnsibleDirectory(); err != nil {

@@ -107,10 +107,6 @@ func initConfig() {
 	}
 }
 
-func executeExternalProgram(program string, params ...string) {
-	executeExternalProgramEnv(program, []string{""}, params...)
-}
-
 func executeExternalProgramEnv(program string, env []string, params ...string) {
 	cmd := exec.Command(program, params...)
 	cmd.Stderr = os.Stderr

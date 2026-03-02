@@ -20,6 +20,7 @@ import (
 	"strings"
 
 	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/go-toolbox/execute"
 	"github.com/dcjulian29/go-toolbox/filesystem"
 	"github.com/spf13/cobra"
 )
@@ -52,9 +53,7 @@ var (
 				param = append(param, "--list")
 			}
 
-			executeExternalProgram("ansible-inventory", param...)
-
-			return nil
+			return execute.ExternalProgram("ansible-inventory", param...)
 		},
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			if err := ansible.EnsureAnsibleDirectory(); err != nil {

@@ -21,6 +21,7 @@ import (
 	"path/filepath"
 
 	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/go-toolbox/execute"
 	"github.com/dcjulian29/go-toolbox/filesystem"
 	"github.com/spf13/cobra"
 )
@@ -46,9 +47,7 @@ var createCmd = &cobra.Command{
 
 		param = append(param, playbook)
 
-		executeExternalProgram("ansible-playbook", param...)
-
-		return nil
+		return execute.ExternalProgram("ansible-playbook", param...)
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := ansible.EnsureAnsibleDirectory(); err != nil {
