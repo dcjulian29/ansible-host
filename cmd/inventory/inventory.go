@@ -39,6 +39,8 @@ func NewCommand() *cobra.Command {
 				"-l", strings.Join(limit, ","),
 			}
 
+			variables, _ := cmd.Flags().GetBool("variables")
+
 			if variables {
 				if r, _ := cmd.Flags().GetBool("toml"); r {
 					param = append(param, "--toml")
@@ -50,7 +52,7 @@ func NewCommand() *cobra.Command {
 			} else {
 				param = append(param, "--graph")
 			}
-    
+
 			if len(args) > 0 {
 				param = append(param, "--host", args[0])
 			} else {
