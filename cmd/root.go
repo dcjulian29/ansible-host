@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/dcjulian29/ansible-host/cmd/create"
 	"github.com/dcjulian29/go-toolbox/color"
 	"github.com/spf13/cobra"
 	"go.szostok.io/version/extension"
@@ -68,4 +69,8 @@ func Execute() {
 		fmt.Fprintln(os.Stderr, "\n"+color.Fatal(err.Error()))
 		os.Exit(1)
 	}
+}
+
+func init() {
+	rootCmd.AddCommand(create.NewCommand())
 }
