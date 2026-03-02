@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/dcjulian29/ansible-host/internal/ansible"
 	"github.com/spf13/cobra"
 )
 
@@ -59,7 +60,7 @@ var (
 				return
 			}
 
-			ensureAnsibleDirectory()
+			ansible.EnsureAnsibleDirectory()
 			if len(command) > 0 {
 				inventory, _ := cmd.Flags().GetString("inventory")
 

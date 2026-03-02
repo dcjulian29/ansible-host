@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/dcjulian29/ansible-host/internal/ansible"
 	"github.com/spf13/cobra"
 )
 
@@ -59,7 +60,7 @@ var runCmd = &cobra.Command{
 			cobra.CheckErr(errors.New("runbook name was not provided"))
 		}
 
-		ensureAnsibleDirectory()
+		ansible.EnsureAnsibleDirectory()
 
 		collections := executeCommand("ansible-galaxy", []string{""}, "collection", "list")
 

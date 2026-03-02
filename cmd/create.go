@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/dcjulian29/ansible-host/internal/ansible"
 	"github.com/spf13/cobra"
 )
 
@@ -48,7 +49,7 @@ var createCmd = &cobra.Command{
 		executeExternalProgram("ansible-playbook", param...)
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
-		ensureAnsibleDirectory()
+		ansible.EnsureAnsibleDirectory()
 		if len(args) == 0 {
 			cobra.CheckErr(errors.New("hostname to create to was not provided"))
 		}

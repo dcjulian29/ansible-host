@@ -21,6 +21,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/dcjulian29/ansible-host/internal/ansible"
 	"github.com/spf13/cobra"
 )
 
@@ -69,7 +70,7 @@ var provisionCmd = &cobra.Command{
 		executeExternalProgramEnv("ansible-playbook", env, param...)
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
-		ensureAnsibleDirectory()
+		ansible.EnsureAnsibleDirectory()
 		if len(args) == 0 {
 			cobra.CheckErr(errors.New("provision playbook was not provided"))
 		}

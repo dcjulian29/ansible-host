@@ -19,6 +19,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/dcjulian29/ansible-host/internal/ansible"
 	"github.com/spf13/cobra"
 )
 
@@ -50,7 +51,7 @@ var factCmd = &cobra.Command{
 		executeExternalProgram("ansible", param...)
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
-		ensureAnsibleDirectory()
+		ansible.EnsureAnsibleDirectory()
 	},
 }
 

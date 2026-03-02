@@ -95,15 +95,6 @@ func initConfig() {
 	}
 }
 
-func ensureAnsibleDirectory() {
-	if workingDirectory != folderPath {
-		if err := os.Chdir(folderPath); err != nil {
-			fmt.Fprintln(os.Stderr, "Unable to access path!")
-			cobra.CheckErr(err)
-		}
-	}
-}
-
 func ensurefileExists(filename string, errorMsg string) {
 	info, err := os.Stat(filename)
 	if os.IsNotExist(err) || info.IsDir() {

@@ -18,6 +18,7 @@ package cmd
 import (
 	"strings"
 
+	"github.com/dcjulian29/ansible-host/internal/ansible"
 	"github.com/spf13/cobra"
 )
 
@@ -53,7 +54,7 @@ var (
 			executeExternalProgram("ansible-inventory", param...)
 		},
 		PreRun: func(cmd *cobra.Command, args []string) {
-			ensureAnsibleDirectory()
+			ansible.EnsureAnsibleDirectory()
 
 			inventory, _ := cmd.Flags().GetString("inventory")
 
