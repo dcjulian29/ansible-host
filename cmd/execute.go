@@ -20,6 +20,7 @@ import (
 	"strings"
 
 	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/go-toolbox/filesystem"
 	"github.com/spf13/cobra"
 )
 
@@ -54,18 +55,24 @@ var (
 
 			executeExternalProgram("ansible", param...)
 		},
-		PreRun: func(cmd *cobra.Command, args []string) {
-			if len(command) == 0 {
-				cmd.Help()
-				return
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			if err := ansible.EnsureAnsibleDirectory(); err != nil {
+				return err
 			}
 
-			ansible.EnsureAnsibleDirectory()
+			if len(command) == 0 {
+				return cmd.Help()
+			}
+
 			if len(command) > 0 {
 				inventory, _ := cmd.Flags().GetString("inventory")
 
-				ensurefileExists(inventory, "Ansible inventory file is not accessable!")
+				if !filesystem.FileExists(inventory) {
+					return fmt.Errorf("inventory file '%s' does not exist", inventory)
+				}
 			}
+
+			return nil
 		},
 	}
 )

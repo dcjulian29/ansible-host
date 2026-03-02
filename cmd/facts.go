@@ -50,8 +50,12 @@ var factCmd = &cobra.Command{
 
 		executeExternalProgram("ansible", param...)
 	},
-	PreRun: func(cmd *cobra.Command, args []string) {
-		ansible.EnsureAnsibleDirectory()
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		if err := ansible.EnsureAnsibleDirectory(); err != nil {
+			return err
+		}
+
+		return nil
 	},
 }
 

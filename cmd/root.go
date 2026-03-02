@@ -16,7 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -105,13 +104,6 @@ func initConfig() {
 
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-	}
-}
-
-func ensurefileExists(filename string, errorMsg string) {
-	info, err := os.Stat(filename)
-	if os.IsNotExist(err) || info.IsDir() {
-		cobra.CheckErr(errors.New(errorMsg))
 	}
 }
 

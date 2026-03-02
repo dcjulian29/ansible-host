@@ -55,18 +55,22 @@ var runCmd = &cobra.Command{
 
 		executeExternalProgramEnv("ansible-playbook", env, param...)
 	},
-	PreRun: func(cmd *cobra.Command, args []string) {
-		if len(args) == 0 {
-			cobra.CheckErr(errors.New("runbook name was not provided"))
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		if err := ansible.EnsureAnsibleDirectory(); err != nil {
+			return err
 		}
 
-		ansible.EnsureAnsibleDirectory()
+		if len(args) == 0 {
+			return errors.New("runbook name was not provided")
+		}
 
 		collections := executeCommand("ansible-galaxy", []string{""}, "collection", "list")
 
 		if !strings.Contains(collections, args[0]) {
-			cobra.CheckErr(errors.New("runbook is not accessable"))
+			return errors.New("runbook is not accessable")
 		}
+
+		return nil
 	},
 }
 

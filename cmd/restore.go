@@ -16,7 +16,10 @@ limitations under the License.
 package cmd
 
 import (
+	"errors"
+
 	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/go-toolbox/filesystem"
 	"github.com/spf13/cobra"
 )
 
@@ -47,9 +50,16 @@ var restoreCmd = &cobra.Command{
 
 		executeExternalProgram("ansible-galaxy", param...)
 	},
-	PreRun: func(cmd *cobra.Command, args []string) {
-		ansible.EnsureAnsibleDirectory()
-		ensurefileExists("requirements.yml", "Requirements file is not accessable!")
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		if err := ansible.EnsureAnsibleDirectory(); err != nil {
+			return err
+		}
+
+		if !filesystem.FileExists("requirements.yml") {
+			return errors.New("requirements file does not exist")
+		}
+
+		return nil
 	},
 }
 

@@ -21,6 +21,7 @@ import (
 	"path/filepath"
 
 	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/go-toolbox/filesystem"
 	"github.com/spf13/cobra"
 )
 
@@ -48,19 +49,26 @@ var createCmd = &cobra.Command{
 
 		executeExternalProgram("ansible-playbook", param...)
 	},
-	PreRun: func(cmd *cobra.Command, args []string) {
-		ansible.EnsureAnsibleDirectory()
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		if err := ansible.EnsureAnsibleDirectory(); err != nil {
+			return err
+		}
+
 		if len(args) == 0 {
-			cobra.CheckErr(errors.New("hostname to create to was not provided"))
+			return errors.New("hostname to create to was not provided")
 		}
 
 		if len(args) == 1 {
 			playbook := filepath.Join("playbooks", fmt.Sprintf("%s.yml", args[0]))
 
-			ensurefileExists(playbook, "Ansible playbook file is not accessable!")
+			if !filesystem.FileExists(playbook) {
+				return fmt.Errorf("playbook file for '%s' does not exist", args[0])
+			}
 		} else {
-			cmd.Help()
+			return cmd.Help()
 		}
+
+		return nil
 	},
 }
 
