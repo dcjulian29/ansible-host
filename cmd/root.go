@@ -22,6 +22,7 @@ import (
 	"github.com/dcjulian29/ansible-host/cmd/create"
 	"github.com/dcjulian29/ansible-host/cmd/execute"
 	"github.com/dcjulian29/ansible-host/cmd/fact"
+	"github.com/dcjulian29/ansible-host/cmd/inventory"
 	"github.com/dcjulian29/go-toolbox/color"
 	"github.com/spf13/cobra"
 	"go.szostok.io/version/extension"
@@ -45,7 +46,7 @@ organizations to quickly and easily deploy new servers and services on-demand, s
 process of application development and deployment. It also ensures that systems are configured
 consistently and according to best practices, reducing the risk of errors and vulnerabilities.
 
-Runbooks are a set of detailed and repeatable procedures tasks to standardize and automate common
+Runbooks are a set of detailed and repeatable procedures/tasks to standardize and automate common
 tasks and processes. These procedures may include steps for infrastructure and hardware validation,
 troubleshooting issues, and more. By using runbooks, one can ensure that tasks are completed
 consistently and efficiently, reducing the risk of errors and downtime.`,
@@ -77,4 +78,5 @@ func init() {
 	rootCmd.AddCommand(create.NewCommand())
 	rootCmd.AddCommand(execute.NewCommand())
 	rootCmd.AddCommand(fact.NewCommand())
+	rootCmd.AddCommand(inventory.NewCommand())
 }

@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package cmd
+package inventory
 
 import (
 	"fmt"
@@ -25,8 +25,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	inventoryCmd = &cobra.Command{
+func NewCommand() *cobra.Command {
+	cmd := &cobra.Command{
 		Use:     "inventory [hostname]",
 		Aliases: []string{"inv"},
 		Short:   "Show inventory information for the Ansible environment",
@@ -69,15 +69,13 @@ var (
 			return nil
 		},
 	}
-)
 
-func init() {
-	rootCmd.AddCommand(inventoryCmd)
+	cmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
+	cmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit to specified subset")
+	cmd.Flags().Bool("toml", false, "Use TOML format instead of default JSON")
+	cmd.Flags().BoolP("yaml", "y", false, "Use TOML format instead of default JSON")
 
-	inventoryCmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
-	inventoryCmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit to specified subset")
-	inventoryCmd.Flags().Bool("toml", false, "Use TOML format instead of default JSON")
-	inventoryCmd.Flags().BoolP("yaml", "y", false, "Use TOML format instead of default JSON")
+	cmd.MarkFlagsMutuallyExclusive("toml", "yaml")
 
-	inventoryCmd.MarkFlagsMutuallyExclusive("toml", "yaml")
+	return cmd
 }
