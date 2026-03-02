@@ -29,7 +29,6 @@ var (
 		Use:     "inventory [hostname]",
 		Aliases: []string{"inv"},
 		Short:   "Show inventory information for the Ansible environment",
-		Long:    "Show inventory information for the Ansible environment",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			inventory, _ := cmd.Flags().GetString("inventory")
 			limit, _ := cmd.Flags().GetStringSlice("subset")

@@ -28,7 +28,6 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create [hostname]",
 	Short: "Create a host via an imperative-style Ansible playbook",
-	Long:  "Create a host via an imperative-style Ansible playbook",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		playbook := fmt.Sprintf("playbooks/%s.yml", args[0])
 		inventory, _ := cmd.Flags().GetString("inventory")

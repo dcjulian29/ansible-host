@@ -27,7 +27,6 @@ import (
 var pingCmd = &cobra.Command{
 	Use:   "ping",
 	Short: "Ping the Ansible environment",
-	Long:  "Ping the Ansible environment",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		inventory, _ := cmd.Flags().GetString("inventory")
 		limit, _ := cmd.Flags().GetStringSlice("subset")

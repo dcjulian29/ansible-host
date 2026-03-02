@@ -26,7 +26,6 @@ import (
 var restoreCmd = &cobra.Command{
 	Use:   "restore",
 	Short: "Restore Ansible collections and roles from files, URLs or Ansible Galaxy",
-	Long:  "Restore Ansible collections and roles from files, URLs or Ansible Galaxy",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		param := []string{"install"}
 

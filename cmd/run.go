@@ -27,7 +27,6 @@ import (
 var runCmd = &cobra.Command{
 	Use:   "run [runbook]",
 	Short: "Run a runbook (aka. playbook) via Ansible in the target environment",
-	Long:  "Run a runbook (aka. playbook) via Ansible in the target environment",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		runbook := fmt.Sprintf("%s.runbook.yml", args[0])
 		inventory, _ := cmd.Flags().GetString("inventory")

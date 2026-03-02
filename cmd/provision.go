@@ -29,7 +29,6 @@ import (
 var provisionCmd = &cobra.Command{
 	Use:   "provision [playbook]",
 	Short: "Provision host(s) via Ansible in the target environment",
-	Long:  "Provision host(s) via Ansible in the target environment",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		playbook := fmt.Sprintf("playbooks/%s.yml", args[0])
 		inventory, _ := cmd.Flags().GetString("inventory")

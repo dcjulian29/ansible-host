@@ -30,7 +30,6 @@ var (
 	executeCmd = &cobra.Command{
 		Use:   "execute [flags] -- [command]",
 		Short: "Execute a command via Ansible in the target environment",
-		Long:  "Execute a command via Ansible in the target environment",
 		Args: func(cmd *cobra.Command, args []string) error {
 			command = strings.Join(args, " ")
 
