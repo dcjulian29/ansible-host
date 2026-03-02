@@ -13,29 +13,31 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package cmd
+package execute
 
 import (
 	"fmt"
 	"strings"
 
+	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/go-toolbox/execute"
+	"github.com/dcjulian29/go-toolbox/filesystem"
 	"github.com/spf13/cobra"
 )
 
-var (
-	command string
+var command string
 
-	executeCmd = &cobra.Command{
+func NewCommand() *cobra.Command {
+	cmd := &cobra.Command{
 		Use:   "execute [flags] -- [command]",
 		Short: "Execute a command via Ansible in the target environment",
-		Long:  "Execute a command via Ansible in the target environment",
 		Args: func(cmd *cobra.Command, args []string) error {
 			command = strings.Join(args, " ")
 
 			return nil
 		},
 		FParseErrWhitelist: cobra.FParseErrWhitelist{UnknownFlags: true},
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			inventory, _ := cmd.Flags().GetString("inventory")
 			limit, _ := cmd.Flags().GetStringSlice("subset")
 
@@ -51,31 +53,32 @@ var (
 				param = append([]string{"-v"}, param...)
 			}
 
-			executeExternalProgram("ansible", param...)
+			return execute.ExternalProgram("ansible", param...)
 		},
-		PreRun: func(cmd *cobra.Command, args []string) {
-			if len(command) == 0 {
-				cmd.Help()
-				return
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			if err := ansible.EnsureAnsibleDirectory(); err != nil {
+				return err
 			}
 
-			ensureAnsibleDirectory()
+			if len(command) == 0 {
+				return cmd.Help()
+			}
+
 			if len(command) > 0 {
 				inventory, _ := cmd.Flags().GetString("inventory")
 
-				ensurefileExists(inventory, "Ansible inventory file is not accessable!")
+				if !filesystem.FileExists(inventory) {
+					return fmt.Errorf("inventory file '%s' does not exist", inventory)
+				}
 			}
-		},
-		PostRun: func(cmd *cobra.Command, args []string) {
-			ensureWorkingDirectory()
+
+			return nil
 		},
 	}
-)
 
-func init() {
-	rootCmd.AddCommand(executeCmd)
+	cmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
+	cmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit execution to specified subset")
+	cmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
 
-	executeCmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
-	executeCmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit execution to specified subset")
-	executeCmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
+	return cmd
 }

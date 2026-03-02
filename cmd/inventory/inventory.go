@@ -13,21 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package cmd
+package inventory
 
 import (
+	"fmt"
 	"strings"
 
+	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/go-toolbox/execute"
+	"github.com/dcjulian29/go-toolbox/filesystem"
 	"github.com/spf13/cobra"
 )
 
-var (
-	inventoryCmd = &cobra.Command{
+func NewCommand() *cobra.Command {
+	cmd := &cobra.Command{
 		Use:     "inventory [hostname]",
 		Aliases: []string{"inv"},
 		Short:   "Show inventory information for the Ansible environment",
-		Long:    "Show inventory information for the Ansible environment",
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			inventory, _ := cmd.Flags().GetString("inventory")
 			limit, _ := cmd.Flags().GetStringSlice("subset")
 
@@ -50,28 +53,29 @@ var (
 				param = append(param, "--list")
 			}
 
-			executeExternalProgram("ansible-inventory", param...)
+			return execute.ExternalProgram("ansible-inventory", param...)
 		},
-		PreRun: func(cmd *cobra.Command, args []string) {
-			ensureAnsibleDirectory()
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			if err := ansible.EnsureAnsibleDirectory(); err != nil {
+				return err
+			}
 
 			inventory, _ := cmd.Flags().GetString("inventory")
 
-			ensurefileExists(inventory, "Ansible inventory file is not accessable!")
-		},
-		PostRun: func(cmd *cobra.Command, args []string) {
-			ensureWorkingDirectory()
+			if !filesystem.FileExists(inventory) {
+				return fmt.Errorf("inventory file '%s' does not exist", inventory)
+			}
+
+			return nil
 		},
 	}
-)
 
-func init() {
-	rootCmd.AddCommand(inventoryCmd)
+	cmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
+	cmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit to specified subset")
+	cmd.Flags().Bool("toml", false, "Use TOML format instead of default JSON")
+	cmd.Flags().BoolP("yaml", "y", false, "Use TOML format instead of default JSON")
 
-	inventoryCmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
-	inventoryCmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit to specified subset")
-	inventoryCmd.Flags().Bool("toml", false, "Use TOML format instead of default JSON")
-	inventoryCmd.Flags().BoolP("yaml", "y", false, "Use TOML format instead of default JSON")
+	cmd.MarkFlagsMutuallyExclusive("toml", "yaml")
 
-	inventoryCmd.MarkFlagsMutuallyExclusive("toml", "yaml")
+	return cmd
 }

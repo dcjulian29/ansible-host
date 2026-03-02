@@ -1,3 +1,4 @@
+version: 2
 before:
   hooks:
     - go mod tidy
@@ -10,6 +11,10 @@ builds:
       - windows
     goarch:
       - amd64
+    ldflags:
+      - -s -w
+      - -X go.szostok.io/version.version={{.Version}}
+      - -X go.szostok.io/version.buildDate={{.Date}}
 archives:
   - files:
       - LICENSE
@@ -19,7 +24,7 @@ archives:
       mode: 0755
     name_template: "dcjulian29.apps.ansible-host_{{ .Version }}_{{ .Os }}"
     format_overrides:
-      - format: zip
+      - formats: [ 'zip' ]
         goos: windows
 nfpms:
   - package_name: dcjulian29.apps.ansible-host
@@ -92,7 +97,7 @@ chocolateys:
 checksum:
   name_template: 'checksums.txt'
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  version_template: "{{ incpatch .Version }}-next"
 changelog:
   sort: asc
   filters:
