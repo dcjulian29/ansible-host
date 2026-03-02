@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package cmd
+package execute
 
 import (
 	"fmt"
@@ -25,10 +25,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	command string
+var command string
 
-	executeCmd = &cobra.Command{
+func NewCommand() *cobra.Command {
+	cmd := &cobra.Command{
 		Use:   "execute [flags] -- [command]",
 		Short: "Execute a command via Ansible in the target environment",
 		Args: func(cmd *cobra.Command, args []string) error {
@@ -75,12 +75,10 @@ var (
 			return nil
 		},
 	}
-)
 
-func init() {
-	rootCmd.AddCommand(executeCmd)
+	cmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
+	cmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit execution to specified subset")
+	cmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
 
-	executeCmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
-	executeCmd.Flags().StringSliceP("subset", "l", []string{"all"}, "limit execution to specified subset")
-	executeCmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
+	return cmd
 }
