@@ -16,7 +16,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
-	github.com/dcjulian29/go-toolbox v0.11.0
+	github.com/dcjulian29/go-toolbox v0.13.1
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/goccy/go-yaml v1.19.2 // indirect
