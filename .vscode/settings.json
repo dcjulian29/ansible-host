@@ -4,6 +4,8 @@
     "chocolateys",
     "dcjulian",
     "goarch",
+    "golangci",
+    "gomod",
     "ldflags",
     "nfpms",
     "szostok",

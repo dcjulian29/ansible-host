@@ -40,8 +40,6 @@ jobs:
           cache-dependency-path: ${{ github.workspace }}/go.sum
           go-version-file: ${{ github.workspace }}/go.mod
 
-      - run: go version
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
