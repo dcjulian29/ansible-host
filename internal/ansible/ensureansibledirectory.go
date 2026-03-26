@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package ansible
 
 import (
@@ -21,6 +22,9 @@ import (
 	"github.com/dcjulian29/go-toolbox/filesystem"
 )
 
+// EnsureAnsibleDirectory verifies that the current working directory is a
+// valid Ansible development folder by checking for the presence of an
+// "ansible.cfg" file. It returns a non-nil error if the file is missing.
 func EnsureAnsibleDirectory() error {
 	if !filesystem.FileExists("ansible.cfg") {
 		return errors.New("did not find the ansible configuration file")
