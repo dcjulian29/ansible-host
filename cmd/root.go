@@ -13,6 +13,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+// Package cmd is the root command package for the ansible-host CLI. It
+// wires together every subcommand, configures the Cobra root command,
+// and provides the [Execute] entry point invoked by main.
+//
+// ansible-host is designed for managing real (non-development) hosts
+// using Ansible. Unlike ansible-dev, which targets Vagrant-managed
+// virtual machines, ansible-host operates against inventory-defined
+// network hosts for provisioning, fact gathering, and ad-hoc execution.
+//
+// Subcommands are organized into individual packages under cmd/ and
+// registered during init:
+//
+//   - create:    scaffold or generate host-related Ansible artifacts.
+//   - execute:   run ad-hoc Ansible commands against inventory hosts.
+//   - fact:      gather and display Ansible facts for hosts.
+//   - inventory: display or inspect the Ansible host inventory.
+//   - ping:      verify host reachability via Ansible ping.
+//   - provision: apply roles and playbooks to configure hosts.
+//   - restore:   install dependencies from requirements files.
+//   - runbook:   execute predefined runbook playbooks against hosts.
 package cmd
 
 import (
@@ -32,6 +53,11 @@ import (
 	"go.szostok.io/version/extension"
 )
 
+// rootCmd is the top-level Cobra command for the ansible-host CLI. When
+// invoked without a subcommand it prints the help text, which includes
+// an extended description of provisioning concepts and runbook workflows.
+// Both SilenceErrors and SilenceUsage are enabled so that error
+// formatting is handled exclusively by [Execute].
 var rootCmd = &cobra.Command{
 	Use:   "ansible-host",
 	Short: "Provision, ping, play runbooks, and execute command utilizing Ansible",
@@ -65,6 +91,14 @@ consistently and efficiently, reducing the risk of errors and downtime.`,
 	},
 }
 
+// Execute is the main entry point for the CLI, called from main.main.
+// It adds the auto-generated "version" subcommand (provided by
+// go.szostok.io/version) with an upgrade notice for the
+// "dcjulian29/ansible-host" GitHub repository, then delegates to
+// [cobra.Command.Execute].
+//
+// If execution returns an error, the error message is printed to stderr
+// using [color.Fatal] formatting and the process exits with code 1.
 func Execute() {
 	rootCmd.AddCommand(
 		extension.NewVersionCobraCmd(
@@ -78,6 +112,10 @@ func Execute() {
 	}
 }
 
+// init registers all subcommands on the root command during package
+// initialization. Each subcommand is provided by a dedicated package
+// under cmd/ and exposes a NewCommand factory function that returns a
+// configured [cobra.Command].
 func init() {
 	rootCmd.AddCommand(create.NewCommand())
 	rootCmd.AddCommand(execute.NewCommand())

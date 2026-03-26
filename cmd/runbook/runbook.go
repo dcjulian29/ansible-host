@@ -13,6 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+// Package runbook implements the "ansible-host run" command, which
+// executes an Ansible runbook (playbook) against hosts defined in the
+// target inventory. The runbook must be installed as an Ansible
+// collection before it can be run.
 package runbook
 
 import (
@@ -25,6 +30,46 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// NewCommand creates and returns the Cobra command for "ansible-host run",
+// which executes a named runbook (playbook) against hosts in the target
+// environment using ansible-playbook.
+//
+// Usage:
+//
+//	ansible-host run [runbook] [flags]
+//
+// The positional argument [runbook] is the runbook name (without the
+// ".runbook.yml" suffix). The command automatically appends the suffix
+// to form the full playbook filename. For example:
+//
+//	ansible-host run patching
+//
+// executes the playbook "patching.runbook.yml".
+//
+// The command sets the following environment variables for the
+// ansible-playbook invocation:
+//   - ANSIBLE_DISPLAY_SKIPPED_HOSTS=true — show skipped hosts in output.
+//   - ANSIBLE_VERBOSITY=0 — default verbosity level (overridden by -v).
+//
+// Flags:
+//   - --inventory, -i: path to the Ansible inventory file
+//     (default "hosts.ini").
+//   - --subset, -l:    limit execution to the specified host subset(s).
+//     Accepts repeated flags or comma-separated values
+//     (default ["all"]).
+//   - --verbose, -v:   prepend -v to the ansible-playbook arguments for
+//     additional debug output (default false).
+//   - --ask-become-password: append --ask-become-pass to prompt for the
+//     privilege escalation (sudo) password at runtime (default false).
+//
+// A PreRunE hook performs three validations before execution:
+//  1. [ansible.EnsureAnsibleDirectory] — verifies the current directory
+//     is a valid Ansible project (contains ansible.cfg).
+//  2. Argument check — returns an error if no runbook name is provided.
+//  3. Collection check — runs "ansible-galaxy collection list" and
+//     verifies that the output contains the runbook name, ensuring the
+//     runbook's collection is installed. Returns "runbook is not
+//     installed" if the collection is not found.
 func NewCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "run [runbook]",
@@ -61,7 +106,7 @@ func NewCommand() *cobra.Command {
 
 			return nil
 		},
-		PreRunE: func(cmd *cobra.Command, args []string) error {
+		PreRunE: func(_ *cobra.Command, args []string) error {
 			if err := ansible.EnsureAnsibleDirectory(); err != nil {
 				return err
 			}
