@@ -30,7 +30,7 @@ nfpms:
   - package_name: dcjulian29.apps.ansible-host
     file_name_template: "{{ .PackageName }}_{{ .Version }}"
     homepage: https://github.com/dcjulian29/ansible-host/
-    maintainer: Julian Easterling <julian@julianscorner.com>
+    maintainer: Julian Easterling
     license: Apache 2.0
     dependencies:
       - docker-ce
@@ -65,9 +65,9 @@ nfpms:
           - docker
 chocolateys:
   - name: dcjulian29.apps.ansible-host
-    authors: Julian Easterling <julian@julianscorner.com>
+    authors: Julian Easterling
     project_url: https://github.com/dcjulian29/ansible-host/
-    copyright: 2023 Julian Easterling julian@julianscorner.com
+    copyright: 2026 Julian Easterling
     license_url: https://github.com/dcjulian29/ansible-host/blob/main/LICENSE
     require_license_acceptance: false
     bug_tracker_url: https://github.com/dcjulian29/ansible-host/issues
