@@ -36,8 +36,10 @@ import (
 // This replaces the remove-and-retry cycle (once per key type) and the
 // interactive ssh otherwise needed after a host is rebuilt.
 //
-// The host is recorded under the name given, so use the name or address
-// Ansible connects with (ansible_host, when the inventory sets one).
+// A name is first resolved through ~/.ssh/config (HostName and Port),
+// and the keys are recorded under the result, which is the name ssh and
+// Ansible look up. A name the configuration does not mention is used as
+// given, so an FQDN or IP works directly.
 //
 // Flags:
 //   - --timeout: how long to wait for each connection (default 5s).
@@ -52,7 +54,12 @@ func newRefreshCommand() *cobra.Command {
 			timeout, _ := cmd.Flags().GetDuration("timeout")
 			hash, _ := cmd.Flags().GetBool("hash")
 
-			for _, host := range args {
+			for _, name := range args {
+				host, err := resolveHost(name)
+				if err != nil {
+					return err
+				}
+
 				// Fetched before anything is removed, so a host that cannot
 				// be reached keeps its existing entries.
 				keys, err := knownhosts.Scan(host, timeout)

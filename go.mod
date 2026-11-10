@@ -2,7 +2,10 @@ module github.com/dcjulian29/ansible-host
 
 go 1.26.5
 
-require go.szostok.io/version v1.2.0
+require (
+	github.com/kevinburke/ssh_config v1.6.0
+	go.szostok.io/version v1.2.0
+)
 
 require (
 	dario.cat/mergo v1.0.2 // indirect

@@ -20,6 +20,9 @@ limitations under the License.
 package knownhosts
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/dcjulian29/ansible-host/internal/knownhosts"
 	"github.com/spf13/cobra"
 )
@@ -45,7 +48,9 @@ Rebuilding a host gives it new SSH host keys, and the next Ansible run against i
 "REMOTE HOST IDENTIFICATION HAS CHANGED". "refresh" replaces every recorded key for the host with
 the keys it presents now, so the run can start without an interactive ssh first.
 
-Hashed entries (HashKnownHosts yes) are matched by host name.`,
+Hosts can be given as an alias from ~/.ssh/config, a host name, or an IP address; an alias is
+resolved to its HostName and Port first, since that is the name ssh records. Hashed entries
+(HashKnownHosts yes) are matched by host name.`,
 	}
 
 	cmd.PersistentFlags().StringP("file", "f", knownhosts.DefaultPath(), "known_hosts file to manage")
@@ -55,4 +60,21 @@ Hashed entries (HashKnownHosts yes) are matched by host name.`,
 	cmd.AddCommand(newRefreshCommand())
 
 	return cmd
+}
+
+// resolveHost applies ~/.ssh/config to a host name as typed, so an alias
+// acts on the HostName ssh actually recorded. When the name changes, a
+// note goes to stderr; it stays out of stdout so the tables can still be
+// piped.
+func resolveHost(name string) (string, error) {
+	address, err := knownhosts.Resolve(name)
+	if err != nil {
+		return "", err
+	}
+
+	if address != name {
+		fmt.Fprintf(os.Stderr, "'%s' resolves to '%s' through the ssh configuration\n", name, address)
+	}
+
+	return address, nil
 }

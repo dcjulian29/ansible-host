@@ -47,7 +47,9 @@ func newListCommand() *cobra.Command {
 
 			host := ""
 			if len(args) == 1 {
-				host = args[0]
+				if host, err = resolveHost(args[0]); err != nil {
+					return err
+				}
 			}
 
 			selected := []knownhosts.Entry{}

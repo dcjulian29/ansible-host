@@ -58,7 +58,12 @@ func newRemoveCommand() *cobra.Command {
 				return nil
 			}
 
-			for _, host := range args {
+			for _, name := range args {
+				host, err := resolveHost(name)
+				if err != nil {
+					return err
+				}
+
 				removed, err := knownhosts.RemoveHost(file, host)
 				if err != nil {
 					return err
