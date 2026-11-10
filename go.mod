@@ -2,7 +2,10 @@ module github.com/dcjulian29/ansible-host
 
 go 1.26.5
 
-require go.szostok.io/version v1.2.0
+require (
+	github.com/kevinburke/ssh_config v1.6.0
+	go.szostok.io/version v1.2.0
+)
 
 require (
 	dario.cat/mergo v1.0.2 // indirect
@@ -37,7 +40,7 @@ require (
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10 // indirect
-	golang.org/x/crypto v0.52.0 // indirect
+	golang.org/x/crypto v0.58.0
 	golang.org/x/sys v0.49.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

@@ -30,6 +30,7 @@ limitations under the License.
 //   - execute:   run ad-hoc Ansible commands against inventory hosts.
 //   - fact:      gather and display Ansible facts for hosts.
 //   - inventory: display or inspect the Ansible host inventory.
+//   - known-hosts: list, remove, or refresh SSH host keys for hosts.
 //   - ping:      verify host reachability via Ansible ping.
 //   - provision: apply roles and playbooks to configure hosts.
 //   - restore:   install dependencies from requirements files.
@@ -44,6 +45,7 @@ import (
 	"github.com/dcjulian29/ansible-host/cmd/execute"
 	"github.com/dcjulian29/ansible-host/cmd/fact"
 	"github.com/dcjulian29/ansible-host/cmd/inventory"
+	knownhostscmd "github.com/dcjulian29/ansible-host/cmd/knownhosts"
 	"github.com/dcjulian29/ansible-host/cmd/ping"
 	"github.com/dcjulian29/ansible-host/cmd/provision"
 	"github.com/dcjulian29/ansible-host/cmd/restore"
@@ -121,6 +123,7 @@ func init() {
 	rootCmd.AddCommand(execute.NewCommand())
 	rootCmd.AddCommand(fact.NewCommand())
 	rootCmd.AddCommand(inventory.NewCommand())
+	rootCmd.AddCommand(knownhostscmd.NewCommand())
 	rootCmd.AddCommand(ping.NewCommand())
 	rootCmd.AddCommand(provision.NewCommand())
 	rootCmd.AddCommand(restore.NewCommand())

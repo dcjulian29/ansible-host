@@ -7,9 +7,13 @@
     "goarch",
     "golangci",
     "gomod",
+    "gosec",
+    "knownhostscmd",
     "ldflags",
     "nfpms",
+    "nolint",
     "szostok",
-    "unmark"
+    "unmark",
+    "xknownhosts"
   ]
 }
