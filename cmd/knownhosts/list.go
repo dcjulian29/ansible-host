@@ -86,7 +86,10 @@ func newListCommand() *cobra.Command {
 func printEntries(entries []knownhosts.Entry, known string) {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 
-	fmt.Fprintln(w, "LINE\tHOST\tTYPE\tFINGERPRINT")
+	// The tabwriter only buffers until Flush, so these writes cannot fail
+	// on their own; their errors are discarded, as Flush's is below,
+	// since a table on stdout has nowhere better to report one.
+	_, _ = fmt.Fprintln(w, "LINE\tHOST\tTYPE\tFINGERPRINT")
 
 	for _, entry := range entries {
 		hosts := make([]string, 0, len(entry.Hosts))
@@ -107,7 +110,7 @@ func printEntries(entries []knownhosts.Entry, known string) {
 			host = entry.Marker + " " + host
 		}
 
-		fmt.Fprintf(w, "%d\t%s\t%s\t%s\n",
+		_, _ = fmt.Fprintf(w, "%d\t%s\t%s\t%s\n",
 			entry.Line, host, entry.Key.Type(), ssh.FingerprintSHA256(entry.Key))
 	}
 
