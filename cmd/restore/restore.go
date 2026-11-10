@@ -87,7 +87,7 @@ func NewCommand() *cobra.Command {
 				return err
 			}
 
-			if !filesystem.FileExists("requirements.yml") {
+			if !filesystem.FileExist("requirements.yml") {
 				return errors.New("requirements file does not exist")
 			}
 

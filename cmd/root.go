@@ -48,7 +48,7 @@ import (
 	"github.com/dcjulian29/ansible-host/cmd/provision"
 	"github.com/dcjulian29/ansible-host/cmd/restore"
 	"github.com/dcjulian29/ansible-host/cmd/runbook"
-	"github.com/dcjulian29/go-toolbox/color"
+	"github.com/dcjulian29/go-toolbox/textformat"
 	"github.com/spf13/cobra"
 	"go.szostok.io/version/extension"
 )
@@ -98,7 +98,7 @@ consistently and efficiently, reducing the risk of errors and downtime.`,
 // [cobra.Command.Execute].
 //
 // If execution returns an error, the error message is printed to stderr
-// using [color.Fatal] formatting and the process exits with code 1.
+// using [textformat.Fatal] formatting and the process exits with code 1.
 func Execute() {
 	rootCmd.AddCommand(
 		extension.NewVersionCobraCmd(
@@ -107,7 +107,7 @@ func Execute() {
 	)
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, "\n"+color.Fatal(err.Error()))
+		fmt.Fprintln(os.Stderr, "\n"+textformat.Fatal(err.Error()))
 		os.Exit(1)
 	}
 }

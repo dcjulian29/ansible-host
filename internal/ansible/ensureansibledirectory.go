@@ -26,7 +26,7 @@ import (
 // valid Ansible development folder by checking for the presence of an
 // "ansible.cfg" file. It returns a non-nil error if the file is missing.
 func EnsureAnsibleDirectory() error {
-	if !filesystem.FileExists("ansible.cfg") {
+	if !filesystem.FileExist("ansible.cfg") {
 		return errors.New("did not find the ansible configuration file")
 	}
 

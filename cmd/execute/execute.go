@@ -112,7 +112,7 @@ func NewCommand() *cobra.Command {
 			if len(command) > 0 {
 				inventory, _ := cmd.Flags().GetString("inventory")
 
-				if !filesystem.FileExists(inventory) {
+				if !filesystem.FileExist(inventory) {
 					return fmt.Errorf("inventory file '%s' does not exist", inventory)
 				}
 			}

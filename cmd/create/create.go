@@ -105,7 +105,7 @@ func NewCommand() *cobra.Command {
 			if len(args) == 1 {
 				playbook := filepath.Join("playbooks", fmt.Sprintf("%s.yml", args[0]))
 
-				if !filesystem.FileExists(playbook) {
+				if !filesystem.FileExist(playbook) {
 					return fmt.Errorf("playbook file for '%s' does not exist", args[0])
 				}
 			} else {
