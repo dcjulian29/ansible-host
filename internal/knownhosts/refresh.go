@@ -40,10 +40,6 @@ func Refresh(path, address string, timeout time.Duration, hash bool) (removed, a
 		return nil, nil, err
 	}
 
-	// One Write for both the removal and the addition. Calling RemoveHost
-	// and then Add would write twice, and the second write would replace
-	// "<path>.old" with the file as it was in between, with the old keys
-	// already gone, so the backup could not undo a refresh.
 	kept, removed := splitHost(entries, address)
 	added = newEntries(address, keys, hash, len(kept)+1)
 
