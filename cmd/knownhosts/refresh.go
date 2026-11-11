@@ -60,19 +60,9 @@ func newRefreshCommand() *cobra.Command {
 					return err
 				}
 
-				// Fetched before anything is removed, so a host that cannot
-				// be reached keeps its existing entries.
-				keys, err := knownhosts.Scan(host, timeout)
-				if err != nil {
-					return fmt.Errorf("could not fetch the host keys for '%s': %w", host, err)
-				}
-
-				removed, err := knownhosts.RemoveHost(file, host)
-				if err != nil {
-					return err
-				}
-
-				added, err := knownhosts.Add(file, host, keys, hash)
+				// Refresh fetches the keys before removing anything, so a
+				// host that cannot be reached keeps its existing entries.
+				removed, added, err := knownhosts.Refresh(file, host, timeout, hash)
 				if err != nil {
 					return err
 				}

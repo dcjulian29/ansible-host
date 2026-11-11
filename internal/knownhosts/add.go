@@ -36,11 +36,20 @@ func Add(path, address string, keys []ssh.PublicKey, hash bool) ([]Entry, error)
 		return nil, err
 	}
 
+	added := newEntries(address, keys, hash, len(entries)+1)
+
+	return added, Write(path, append(entries, added...))
+}
+
+// newEntries builds one known_hosts line per key for address, numbered
+// from firstLine. Shared with Refresh, which must remove and add in a
+// single write.
+func newEntries(address string, keys []ssh.PublicKey, hash bool, firstLine int) []Entry {
 	// Lowercased to match what ssh looks up; see [Entry.Matches].
 	host := strings.ToLower(xknownhosts.Normalize(address))
 	added := make([]Entry, 0, len(keys))
 
-	for _, key := range keys {
+	for i, key := range keys {
 		pattern := host
 		if hash {
 			pattern = xknownhosts.HashHostname(host)
@@ -51,12 +60,12 @@ func Add(path, address string, keys []ssh.PublicKey, hash bool) ([]Entry, error)
 		keyText := strings.TrimSpace(string(ssh.MarshalAuthorizedKey(key)))
 
 		added = append(added, Entry{
-			Line:  len(entries) + len(added) + 1,
+			Line:  firstLine + i,
 			Raw:   pattern + " " + keyText,
 			Hosts: []string{pattern},
 			Key:   key,
 		})
 	}
 
-	return added, Write(path, append(entries, added...))
+	return added
 }
