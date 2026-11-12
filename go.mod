@@ -22,7 +22,7 @@ require (
 	github.com/dcjulian29/go-toolbox v0.35.0
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fatih/color v1.18.0 // indirect
-	github.com/goccy/go-yaml v1.19.2 // indirect
+	github.com/goccy/go-yaml v1.19.2
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/go-version v1.8.0 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f // indirect

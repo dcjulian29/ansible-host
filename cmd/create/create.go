@@ -23,8 +23,10 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"time"
 
 	"github.com/dcjulian29/ansible-host/internal/ansible"
+	"github.com/dcjulian29/ansible-host/internal/knownhosts"
 	"github.com/dcjulian29/go-toolbox/execute"
 	"github.com/dcjulian29/go-toolbox/filesystem"
 	"github.com/spf13/cobra"
@@ -60,6 +62,17 @@ import (
 //     password at runtime (default true).
 //   - --verbose, -v:        prepend -v to the ansible-playbook
 //     arguments for additional debug output (default false).
+//   - --host-key-timeout:   how long to wait for each new guest to
+//     answer on SSH before giving up on its host keys (default 3m).
+//   - --no-refresh-host-keys: skip recording the new guests' SSH host
+//     keys (default false).
+//
+// After a successful run, the SSH host keys of every guest the playbook
+// built (each play's virtual_machine_name, following import_playbook)
+// are recorded in ~/.ssh/known_hosts, replacing those of any earlier
+// guest with the same name, so "ansible-host provision" can connect
+// without a host key error. See refreshHostKeys; a failure there only
+// warns, with the manual "known-hosts refresh" command to run.
 //
 // A PreRunE hook performs three validations before execution:
 //  1. [ansible.EnsureAnsibleDirectory] — verifies the current directory
@@ -91,7 +104,18 @@ func NewCommand() *cobra.Command {
 
 			param = append(param, playbook)
 
-			return execute.ExternalProgram("ansible-playbook", param...)
+			if err := execute.ExternalProgram("ansible-playbook", param...); err != nil {
+				return err
+			}
+
+			// Only after a successful run: a failed one may have stopped
+			// before any guest was built, and its error is what matters.
+			if r, _ := cmd.Flags().GetBool("no-refresh-host-keys"); !r {
+				timeout, _ := cmd.Flags().GetDuration("host-key-timeout")
+				refreshHostKeys(playbook, knownhosts.DefaultPath(), timeout)
+			}
+
+			return nil
 		},
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			if err := ansible.EnsureAnsibleDirectory(); err != nil {
@@ -119,6 +143,11 @@ func NewCommand() *cobra.Command {
 	cmd.Flags().StringP("inventory", "i", "hosts.ini", "inventory file for use with Ansible")
 	cmd.Flags().Bool("ask-vault-password", true, "ask for vault password")
 	cmd.Flags().BoolP("verbose", "v", false, "tell Ansible to print more debug messages")
+
+	// Three minutes covers a cloud-image first boot (cloud-init, host key
+	// generation) with room to spare; raise it for slower guests.
+	cmd.Flags().Duration("host-key-timeout", 3*time.Minute, "how long to wait for each new guest to answer on SSH")
+	cmd.Flags().Bool("no-refresh-host-keys", false, "do not record the new guests' SSH host keys")
 
 	return cmd
 }

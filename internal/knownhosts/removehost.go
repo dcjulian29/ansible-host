@@ -31,8 +31,21 @@ func RemoveHost(path, address string) ([]Entry, error) {
 		return nil, err
 	}
 
-	kept := make([]Entry, 0, len(entries))
-	removed := []Entry{}
+	kept, removed := splitHost(entries, address)
+
+	if len(removed) == 0 {
+		return removed, nil
+	}
+
+	return removed, Write(path, kept)
+}
+
+// splitHost separates the entries for address from the rest, keeping
+// both in file order. Shared with Refresh, which must remove and add in
+// a single write.
+func splitHost(entries []Entry, address string) (kept, removed []Entry) {
+	kept = make([]Entry, 0, len(entries))
+	removed = []Entry{}
 
 	for _, entry := range entries {
 		if entry.Matches(address) {
@@ -44,9 +57,5 @@ func RemoveHost(path, address string) ([]Entry, error) {
 		kept = append(kept, entry)
 	}
 
-	if len(removed) == 0 {
-		return removed, nil
-	}
-
-	return removed, Write(path, kept)
+	return kept, removed
 }

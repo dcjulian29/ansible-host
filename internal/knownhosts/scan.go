@@ -20,7 +20,6 @@ import (
 	"errors"
 	"fmt"
 	"net"
-	"strings"
 	"time"
 
 	"golang.org/x/crypto/ssh"
@@ -51,9 +50,7 @@ var errKeyCaptured = errors.New("host key captured")
 // An error is returned if the host cannot be reached at all, or if it
 // offers none of the requested key types.
 func Scan(address string, timeout time.Duration) ([]ssh.PublicKey, error) {
-	if _, _, err := net.SplitHostPort(address); err != nil {
-		address = net.JoinHostPort(strings.Trim(address, "[]"), "22")
-	}
+	address = withDefaultPort(address)
 
 	keys := []ssh.PublicKey{}
 	seen := map[string]bool{}
