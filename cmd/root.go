@@ -27,6 +27,7 @@ limitations under the License.
 // registered during init:
 //
 //   - create:    scaffold or generate host-related Ansible artifacts.
+//   - decommission: move a retired host's files into _decommission.
 //   - execute:   run ad-hoc Ansible commands against inventory hosts.
 //   - fact:      gather and display Ansible facts for hosts.
 //   - inventory: display or inspect the Ansible host inventory.
@@ -42,6 +43,7 @@ import (
 	"os"
 
 	"github.com/dcjulian29/ansible-host/cmd/create"
+	"github.com/dcjulian29/ansible-host/cmd/decommission"
 	"github.com/dcjulian29/ansible-host/cmd/execute"
 	"github.com/dcjulian29/ansible-host/cmd/fact"
 	"github.com/dcjulian29/ansible-host/cmd/inventory"
@@ -120,6 +122,7 @@ func Execute() {
 // configured [cobra.Command].
 func init() {
 	rootCmd.AddCommand(create.NewCommand())
+	rootCmd.AddCommand(decommission.NewCommand())
 	rootCmd.AddCommand(execute.NewCommand())
 	rootCmd.AddCommand(fact.NewCommand())
 	rootCmd.AddCommand(inventory.NewCommand())

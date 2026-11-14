@@ -60,6 +60,14 @@ type playbookCollector struct {
 	warnings []string
 	seen     map[string]bool // host names already collected
 	read     map[string]bool // absolute paths of playbooks already read
+
+	// files lists each playbook read, in the order first read, as its
+	// path was given or joined from the importing playbook's directory.
+	files []string
+
+	// filesOnly skips collecting host names, for callers that only want
+	// files (see PlaybookFiles).
+	filesOnly bool
 }
 
 func (c *playbookCollector) walk(path string) error {
@@ -73,6 +81,7 @@ func (c *playbookCollector) walk(path string) error {
 	}
 
 	c.read[abs] = true
+	c.files = append(c.files, filepath.Clean(path))
 
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -100,7 +109,9 @@ func (c *playbookCollector) walk(path string) error {
 			continue
 		}
 
-		c.addPlay(path, i, play)
+		if !c.filesOnly {
+			c.addPlay(path, i, play)
+		}
 	}
 
 	return nil
